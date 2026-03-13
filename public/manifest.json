@@ -1,0 +1,16 @@
+{
+    "name": "TrendZip",
+    "short_name": "TrendZip",
+    "description": "Premium D2C fashion for the modern Indian",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#0a0a0a",
+    "theme_color": "#c9a96e",
+    "icons": [
+      {
+        "src": "/favicon.svg",
+        "sizes": "any",
+        "type": "image/svg+xml"
+      }
+    ]
+  }
