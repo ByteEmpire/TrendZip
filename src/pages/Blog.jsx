@@ -1,6 +1,7 @@
-import { Link }    from 'react-router-dom'
-import { motion }  from 'framer-motion'
-import { Clock, ArrowRight, Tag } from 'lucide-react'
+import { useState } from 'react'
+import { Link } from 'react-router-dom'
+import { motion } from 'framer-motion'
+import { Clock, ArrowRight } from 'lucide-react'
 
 const POSTS = [
   {
@@ -54,8 +55,8 @@ const POSTS = [
 const CATEGORIES = ['All', 'Style Guide', 'Materials', 'Care Guide', 'Culture', 'Behind the Brand']
 
 export default function Blog() {
+  const [activeCat, setActiveCat] = useState('All')
   const [featured, ...rest] = POSTS
-  const [activeCat, setActiveCat] = require('react').useState('All')
   const filtered = activeCat === 'All' ? rest : rest.filter(p => p.category === activeCat)
 
   return (
@@ -63,19 +64,26 @@ export default function Blog() {
       <div className="max-w-5xl mx-auto">
 
         {/* Header */}
-        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="mb-12 text-center">
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-12 text-center"
+        >
           <p className="eyebrow mb-3">Editorial</p>
           <h1 className="font-display text-4xl text-tz-white font-light">The TrendZip Journal</h1>
-          <p className="text-sm text-tz-muted font-body mt-3">Style, craft, culture — written for people who care about clothes.</p>
+          <p className="text-sm text-tz-muted font-body mt-3">
+            Style, craft, culture — written for people who care about clothes.
+          </p>
         </motion.div>
 
         {/* Featured post */}
         <motion.div
-          initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
           className="bg-tz-dark border border-tz-border overflow-hidden mb-10 group"
         >
-          <div className="grid md:grid-cols-2">
+          <Link to={`/blog/${featured.slug}`} className="grid md:grid-cols-2">
             <div className="aspect-[4/3] md:aspect-auto overflow-hidden">
               <img
                 src={featured.image}
@@ -90,19 +98,23 @@ export default function Blog() {
               <h2 className="font-display text-2xl text-tz-white font-light leading-snug mb-4">
                 {featured.title}
               </h2>
-              <p className="text-sm text-tz-muted font-body leading-relaxed mb-5">{featured.excerpt}</p>
+              <p className="text-sm text-tz-muted font-body leading-relaxed mb-5">
+                {featured.excerpt}
+              </p>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3 text-[10px] text-tz-muted font-body">
                   <span>{featured.date}</span>
                   <span>·</span>
-                  <span className="flex items-center gap-1"><Clock size={9} />{featured.readTime}</span>
+                  <span className="flex items-center gap-1">
+                    <Clock size={9} />{featured.readTime}
+                  </span>
                 </div>
-                <span className="flex items-center gap-1.5 text-xs text-tz-gold font-body hover:gap-2.5 transition-all">
+                <span className="flex items-center gap-1.5 text-xs text-tz-gold font-body group-hover:gap-2.5 transition-all">
                   Read <ArrowRight size={12} />
                 </span>
               </div>
             </div>
-          </div>
+          </Link>
         </motion.div>
 
         {/* Category filter */}
@@ -132,32 +144,44 @@ export default function Blog() {
               transition={{ delay: i * 0.06 }}
               className="bg-tz-dark border border-tz-border group overflow-hidden"
             >
-              <div className="aspect-[4/3] overflow-hidden">
-                <img
-                  src={post.image}
-                  alt={post.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                  loading="lazy"
-                />
-              </div>
-              <div className="p-4">
-                <span className="text-[9px] text-tz-gold font-body font-bold tracking-widest uppercase">
-                  {post.category}
-                </span>
-                <h3 className="font-body text-sm font-semibold text-tz-white mt-2 mb-2 line-clamp-2 group-hover:text-tz-gold transition-colors">
-                  {post.title}
-                </h3>
-                <p className="text-xs text-tz-muted font-body line-clamp-2 leading-relaxed mb-3">
-                  {post.excerpt}
-                </p>
-                <div className="flex items-center justify-between text-[10px] text-tz-muted font-body">
-                  <span>{post.date}</span>
-                  <span className="flex items-center gap-1"><Clock size={9} />{post.readTime}</span>
+              <Link to={`/blog/${post.slug}`} className="block">
+                <div className="aspect-[4/3] overflow-hidden">
+                  <img
+                    src={post.image}
+                    alt={post.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                    loading="lazy"
+                  />
                 </div>
-              </div>
+                <div className="p-4">
+                  <span className="text-[9px] text-tz-gold font-body font-bold tracking-widest uppercase">
+                    {post.category}
+                  </span>
+                  <h3 className="font-body text-sm font-semibold text-tz-white mt-2 mb-2 line-clamp-2 group-hover:text-tz-gold transition-colors">
+                    {post.title}
+                  </h3>
+                  <p className="text-xs text-tz-muted font-body line-clamp-2 leading-relaxed mb-3">
+                    {post.excerpt}
+                  </p>
+                  <div className="flex items-center justify-between text-[10px] text-tz-muted font-body">
+                    <span>{post.date}</span>
+                    <span className="flex items-center gap-1">
+                      <Clock size={9} />{post.readTime}
+                    </span>
+                  </div>
+                </div>
+              </Link>
             </motion.article>
           ))}
         </div>
+
+        {/* Empty state */}
+        {filtered.length === 0 && (
+          <p className="text-center text-sm text-tz-muted font-body py-16">
+            No posts in this category yet. Check back soon.
+          </p>
+        )}
+
       </div>
     </div>
   )
